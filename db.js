@@ -2,9 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 
-const ORDERS_FILE = path.join(__dirname, '..', 'db', 'orders.json');
-const USERS_FILE = path.join(__dirname, '..', 'db', 'users.json');
-
+const ORDERS_FILE = path.join(__dirname, 'db', 'orders.json');
+const USERS_FILE = path.join(__dirname, 'db', 'users.json');
 // Ensure database files exist
 function initDb() {
   // Check/Create orders.json
