@@ -7,7 +7,15 @@ const USERS_FILE = path.join(__dirname, '..', 'db', 'users.json');
 
 // Ensure database files exist
 function initDb() {
-  // Check/Create orders.json
+  const dbDir = path.join(__dirname, '..', 'db');
+
+  // Create db directory if it doesn't exist
+  if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+    console.log('Created db directory');
+  }
+
+  // Create orders.json if it doesn't exist
   if (!fs.existsSync(ORDERS_FILE)) {
     const initialOrders = [
       {
@@ -17,7 +25,7 @@ function initDb() {
         quantity: 120,
         status: "Pending",
         productImage: "corrugated_box",
-        createdAt: new Date(Date.now() - 3600000 * 2).toISOString() // 2 hours ago
+        createdAt: new Date(Date.now() - 3600000 * 2).toISOString()
       },
       {
         id: "ORD-1042",
@@ -26,7 +34,7 @@ function initDb() {
         quantity: 500,
         status: "Pending",
         productImage: "bubble_mailer",
-        createdAt: new Date(Date.now() - 3600000).toISOString() // 1 hour ago
+        createdAt: new Date(Date.now() - 3600000).toISOString()
       },
       {
         id: "ORD-5521",
@@ -35,7 +43,7 @@ function initDb() {
         quantity: 1500,
         status: "Dispatched",
         productImage: "poly_mailer",
-        createdAt: new Date(Date.now() - 3600000 * 5).toISOString() // 5 hours ago
+        createdAt: new Date(Date.now() - 3600000 * 5).toISOString()
       },
       {
         id: "ORD-3029",
@@ -47,13 +55,21 @@ function initDb() {
         createdAt: new Date().toISOString()
       }
     ];
-    fs.writeFileSync(ORDERS_FILE, JSON.stringify(initialOrders, null, 2), 'utf8');
+
+    fs.writeFileSync(
+      ORDERS_FILE,
+      JSON.stringify(initialOrders, null, 2),
+      'utf8'
+    );
+
+    console.log('Created orders.json');
   }
 
-  // Check/Create users.json with hashed default admin password
+  // Create users.json if it doesn't exist
   if (!fs.existsSync(USERS_FILE)) {
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync('admin123', salt);
+
     const initialUsers = [
       {
         id: "admin_1",
@@ -62,10 +78,16 @@ function initDb() {
         name: "Headquarters Administrator"
       }
     ];
-    fs.writeFileSync(USERS_FILE, JSON.stringify(initialUsers, null, 2), 'utf8');
+
+    fs.writeFileSync(
+      USERS_FILE,
+      JSON.stringify(initialUsers, null, 2),
+      'utf8'
+    );
+
+    console.log('Created users.json');
   }
 }
-
 // Read and write helpers
 function readOrders() {
   initDb();
